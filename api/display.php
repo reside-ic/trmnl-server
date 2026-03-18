@@ -7,7 +7,7 @@ function getApiKeyTable(
     $data = [];
     foreach ($config as $friendly_id => $device) {
         $data[$device['api_key']] = ['friendly_id' => $device['friendly_id'],
-                                     'refresh_rate' => '1800'];
+                                     'refresh_rate' => $device['refresh_rate']];
     }
     return $data;
 }

@@ -14,48 +14,35 @@ class DisplayTest extends BaseTest
         $expected = [
         'key1' => [
         'friendly_id' => 'device1',
-        'refresh_rate' => '1800'
+        'refresh_rate' => '180'
         ],
         'key2' => [
         'friendly_id' => 'device2',
-        'refresh_rate' => '1800'
+        'refresh_rate' => '360'
         ]
         ];
         $this->assertEquals($expected, $devices);
     }
 
-    public function testDoSetupSuccess(): void
+    public function testDoDisplaySuccess(): void
     {
-        $headers = ['ID' => 'aa:bb:cc:dd:ee:ff'];
+        $headers = ['ACCESS-TOKEN' => 'key2'];
         ob_start();
-        doSetup($headers, $this->testConfigFile);
+        doDisplay($headers, $this->testConfigFile);
         $output = ob_get_clean();
         $response = json_decode($output, true);
-        $this->assertEquals(200, $response['status']);
-        $this->assertEquals('key1', $response['api_key']);
-        $this->assertEquals('device1', $response['friendly_id']);
-        $this->assertEquals('empty_state', $response['filename']);
+        $this->assertEquals(0, $response['status']);
+        $this->assertEquals('360', $response['refresh_rate']);
     }
 
-    public function testDoSetupMissingID(): void
+    public function testDoSisplayDeviceNotFound(): void
     {
-        $headers = [];
+        $headers = ['ACCESS-TOKEN' => 'potato'];
         ob_start();
-        doSetup($headers, $this->testConfigFile);
+        doDisplay($headers, $this->testConfigFile);
         $output = ob_get_clean();
         $response = json_decode($output, true);
-        $this->assertEquals(400, $response['status']);
-        $this->assertEquals('Missing ID header', $response['error']);
-    }
-
-    public function testDoSetupDeviceNotFound(): void
-    {
-        $headers = ['ID' => 'FF:FF:FF:FF:FF:FF'];
-        ob_start();
-        doSetup($headers, $this->testConfigFile);
-        $output = ob_get_clean();
-        $response = json_decode($output, true);
-        $this->assertEquals(404, $response['status']);
+        $this->assertEquals(500, $response['status']);
         $this->assertEquals('Device not found', $response['error']);
     }
 }

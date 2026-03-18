@@ -6,7 +6,7 @@ from getpass import getpass
 def vault_client():
     VAULT_ADDR = os.environ.get("VAULT_ADDR")
     if not VAULT_ADDR:
-        VAULT_ADDR = getpass("Enter vault url, eg: https://example.com:8200")
+        VAULT_ADDR = input("Enter vault url, eg: https://example.com:8200: ")
 
     VAULT_TOKEN = os.environ.get("VAULT_AUTH_GITHUB_TOKEN")
     if not VAULT_TOKEN:
@@ -22,13 +22,16 @@ def write_secrets(client):
                                              path="trmnl")
     keys = devs["data"]["keys"]
     devices = {}
-    print(keys)
     for key in keys:
         dev = client.secrets.kv.v1.read_secret(mount_point="secret", 
                                                path=f"trmnl/{key}")
         data = dev["data"]
         if "mac" in data and "api_key" in data:
-            devices[key] = {"mac": data["mac"], "api_key": data["api_key"]}
+            devices[key] = {
+                "mac": data["mac"], 
+                "api_key": data["api_key"],
+                "refresh_rate": "1800"
+            }
 
     with open("./secret/config.json", "w") as f:
         json.dump(devices, f, indent=2)

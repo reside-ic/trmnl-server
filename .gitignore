@@ -3,3 +3,4 @@ secret/config.json
 *.bak
 tests\unit\fixtures
 .phpunit.result.cache
+coverage-report

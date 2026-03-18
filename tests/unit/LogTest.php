@@ -5,6 +5,22 @@ require_once __DIR__ . '/BaseTest.php';
 
 class LogTest extends BaseTest
 {
+    public function testDoLogWritesEntryNullBody(): void
+    {
+        $headers = [
+        'ID' => 'AA:BB:CC:DD:EE:FF',
+        'ACCESS-TOKEN' => 'key1'
+        ];
+
+        ob_start();
+        doLog($headers, $this->testLogFile, null);
+        ob_get_clean();
+        $lines = file($this->testLogFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $this->assertCount(1, $lines);
+        $entry = json_decode($lines[0], true);
+        $this->assertEquals("", $entry['payload']);
+    }
+
     public function testDoLogWritesEntry(): void
     {
         $headers = [

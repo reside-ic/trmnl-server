@@ -32,7 +32,7 @@ jobs:
 
       - name: Run PHPUnit with coverage
         run: |
-          XDEBUG_MODE=coverage php phpunit.phar --coverage-text --coverage-clover coverage.xml --fail-on-risky --fail-on-warning
+          XDEBUG_MODE=coverage php phpunit.phar --coverage-text --coverage-clover coverage.xml --fail-on-risky --fail-on-warning --coverage-filter api
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

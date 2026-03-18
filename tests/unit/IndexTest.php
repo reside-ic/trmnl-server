@@ -44,7 +44,7 @@ class IndexTest extends BaseTest
         $headers = ['ACCESS-TOKEN' => 'key1'];
         $response = $this->runIndexWithPath('/display', $headers);
         $this->assertEquals(0, $response['status']);
-        $this->assertEquals('1800', $response['refresh_rate']);
+        $this->assertEquals('180', $response['refresh_rate']);
         $this->assertEquals('https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png', $response['image_url']);
     }
 

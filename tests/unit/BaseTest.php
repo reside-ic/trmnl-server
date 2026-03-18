@@ -18,12 +18,14 @@ class BaseTest extends TestCase
         'device1' => [
         'mac' => 'AA:BB:CC:DD:EE:FF',
         'api_key' => 'key1',
-        'friendly_id' => 'device1'
+        'friendly_id' => 'device1',
+        'refresh_rate' => '180'
         ],
         'device2' => [
         'mac' => '11:22:33:44:55:66',
         'api_key' => 'key2',
-        'friendly_id' => 'device2'
+        'friendly_id' => 'device2',
+        'refresh_rate' => '360'
         ]
         ];
 
