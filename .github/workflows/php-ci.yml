@@ -33,7 +33,6 @@ jobs:
       - name: Run PHPUnit with coverage
         run: |
           php phpunit.phar \
-            --coverage-text \
             --coverage-clover coverage.xml \
             --fail-on-risky \
             --fail-on-warning
