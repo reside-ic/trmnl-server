@@ -1,0 +1,39 @@
+name: PHP CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: xdebug
+          coverage: xdebug
+
+      - name: Lint PHP files
+        run: |
+          find . -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Download PHPUnit
+        run: |
+          wget -O phpunit.phar https://phar.phpunit.de/phpunit-10.phar
+          chmod +x phpunit.phar
+
+      - name: Run PHPUnit with coverage
+        run: |
+          php phpunit.phar \
+            --coverage-text \
+            --coverage-clover coverage.xml \
+            --fail-on-risky \
+            --fail-on-warning

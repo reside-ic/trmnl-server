@@ -1,0 +1,7 @@
+# Deny everyone by default
+Require all denied
+
+# Allow only your server (replace with your server's public IP)
+<Files "config.json">
+    Require all denied
+</Files>

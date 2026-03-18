@@ -1,0 +1,5 @@
+secret/config.json
+*.phar
+*.bak
+tests\unit\fixtures
+.phpunit.result.cache
