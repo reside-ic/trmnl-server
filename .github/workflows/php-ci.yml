@@ -32,4 +32,4 @@ jobs:
 
       - name: Run PHPUnit with coverage
         run: |
-          XDEBUG_MODE=coverage php phpunit.phar --coverage-text --coverage-clover coverage.xml --fail-on-risky --fail-on-warning tests/unit
+          XDEBUG_MODE=coverage php phpunit.phar --coverage-text --coverage-clover coverage.xml --fail-on-risky --fail-on-warning
