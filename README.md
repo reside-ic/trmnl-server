@@ -1,3 +1,5 @@
+![Coverage](https://codecov.io/gh/reside-ic/trmnl-server/branch/main/graph/badge.svg)
+
 # Reside trmnl-server
 
 Various away-days indicated a need in the department to be more aware of
