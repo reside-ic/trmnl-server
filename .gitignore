@@ -1,6 +1,6 @@
 secret/config.json
 *.phar
 *.bak
-tests\unit\fixtures
+tests/unit/fixtures
 .phpunit.result.cache
 coverage-report

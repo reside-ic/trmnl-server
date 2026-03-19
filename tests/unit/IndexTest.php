@@ -18,6 +18,7 @@ class IndexTest extends BaseTest
         $_SERVER['REQUEST_URI'] = $path;
         $_SERVER['PHP_SELF'] = $path;
         $GLOBALS['CONFIG_FILE'] = $this->testConfigFile;
+        $GLOBALS['DATA_DIR'] = dirname($this->testConfigFile)."/";
         $GLOBALS['LOG_FILE'] = $this->testLogFile;
 
         if ($body !== null) {
@@ -41,11 +42,22 @@ class IndexTest extends BaseTest
 
     public function testDisplayEndpoint(): void
     {
-        $headers = ['ACCESS-TOKEN' => 'key1'];
+        $headers = ['ACCESS-TOKEN' => 'key1',
+                    'FW-VERSION' => '1.2.3',
+                    'RSSI' => '-42',
+                    'BATTERY_VOLTAGE' => '4.1'];
         $response = $this->runIndexWithPath('/display', $headers);
         $this->assertEquals(0, $response['status']);
         $this->assertEquals('180', $response['refresh_rate']);
         $this->assertEquals('https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png', $response['image_url']);
+
+        $txtfile = dirname($this->testConfigFile)."/device1.txt";
+        $this->assertFileExists($txtfile);
+        $contents = file_get_contents($txtfile);
+        $this->assertStringContainsString('battery=4.1', $contents);
+        $this->assertStringContainsString('firmware=1.2.3', $contents);
+        $this->assertStringContainsString('rssi=-42', $contents);
+
     }
 
     public function testLogEndpoint(): void

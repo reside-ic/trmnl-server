@@ -26,13 +26,24 @@ class DisplayTest extends BaseTest
 
     public function testDoDisplaySuccess(): void
     {
-        $headers = ['ACCESS-TOKEN' => 'key2'];
+        $headers = ['ACCESS-TOKEN' => 'key2',
+                    'BATTERY-VOLTAGE' => '4.01',
+                    'FW-VERSION' => '2.3.4',
+                    'RSSI' => '-43'];
         ob_start();
-        doDisplay($headers, $this->testConfigFile);
+        $testFolder = dirname($this->testConfigFile)."/";
+        doDisplay($headers, $this->testConfigFile, $testFolder);
         $output = ob_get_clean();
         $response = json_decode($output, true);
         $this->assertEquals(0, $response['status']);
         $this->assertEquals('360', $response['refresh_rate']);
+
+        $txtfile = $testFolder."device2.txt";
+        $this->assertFileExists($txtfile);
+        $contents = file_get_contents($txtfile);
+        $this->assertStringContainsString('battery=4.01', $contents);
+        $this->assertStringContainsString('firmware=2.3.4', $contents);
+        $this->assertStringContainsString('rssi=-43', $contents);
     }
 
     public function testDoSisplayDeviceNotFound(): void
