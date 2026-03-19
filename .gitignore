@@ -1,4 +1,5 @@
 secret/config.json
+secret/*.txt
 *.phar
 *.bak
 tests/unit/fixtures

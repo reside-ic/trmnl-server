@@ -10,7 +10,7 @@ function getSetupDeviceTable(
     foreach ($config as $friendly_id => $device) {
         $data[$device['mac']] = [
         'api_key' => $device['api_key'],
-        'friendly_id' => $device['friendly_id']
+        'friendly_id' => $friendly_id
         ];
     }
     return $data;
