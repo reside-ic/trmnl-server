@@ -41,3 +41,4 @@ function doSetup(
     "message" => "Setup successful"
     ]);
 }
+?>
