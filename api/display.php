@@ -34,7 +34,7 @@ function getScheduledImage($device, $page) {
         $savePath = __DIR__ . '/../images/' . $noticeFile . '.png';
         file_put_contents($savePath, $imageData);
       }
-      return [["https://mrcdata.dide.ic.ac.uk/trmnl/images/" . $notice . ".png", $page];
+      return ["https://mrcdata.dide.ic.ac.uk/trmnl/images/" . $notice . ".png", $page];
     }
   }
   return [$def, $page];
