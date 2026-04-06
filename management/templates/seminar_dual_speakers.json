@@ -1,0 +1,17 @@
+{
+    "name": "Seminar (Dual Speakers)",
+    "back": "ic-display",
+    "elements": [
+        {"x" : 30, "y" : 130, "f" : "ImperialSansDisplay-Bold", "s" : 28, "t" : "DIDE Guest Seminar", "j" : "l", "c" : "black"},
+        {"x" : 30, "y" : 200, "f" : "ImperialSansDisplay-Semibold", "s" : 16, "t" : "Title 1:", "j" : "l", "c" : "black"},
+        {"x" : 30, "y" : 230, "f" : "ImperialSansDisplay-Semibold", "s" : 16, "t" : "Subtitle 1", "j" : "l", "c" : "black"},
+        {"x" : 30, "y" : 260, "f" : "ImperialSansDisplay-Regular", "s" : 16, "t" : "Speaker 1", "j" : "l", "c" : "black"},
+        {"x" : 30, "y" : 320, "f" : "ImperialSansDisplay-Semibold", "s" : 16, "t" : "Title 2", "j" : "l", "c" : "black"},
+        {"x" : 30, "y" : 350, "f" : "ImperialSansDisplay-Semibold", "s" : 16, "t" : "Subtitle 2", "j" : "l", "c" : "black"},
+        {"x" : 30, "y" : 380, "f" : "ImperialSansDisplay-Regular", "s" : 16, "t" : "Speaker 2", "j" : "l", "c" : "black"},
+        {"x" : 550, "y" : 130, "f" : "ImperialSansDisplay-Semibold", "s" : 24, "t" : "When", "j" : "l", "c" : "black"},
+        {"x" : 550, "y" : 170, "f" : "ImperialSansDisplay-Regular", "s" : 16, "t" : "Date, Time", "j" : "l", "c" : "black"},
+        {"x" : 550, "y" : 310, "f" : "ImperialSansDisplay-Semibold", "s" : 24, "t" : "Where", "j" : "l", "c" : "black"},
+        {"x" : 550, "y" : 350, "f" : "ImperialSansDisplay-Regular", "s" : 16, "t" : "Room, & online", "j" : "l", "c" : "black"}
+    ]
+}

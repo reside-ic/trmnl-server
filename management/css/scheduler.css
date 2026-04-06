@@ -1,0 +1,14 @@
+.scroll-card {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+table td, table th {
+    vertical-align: middle;
+}
+
+#scheduleTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

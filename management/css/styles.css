@@ -1,0 +1,12 @@
+.input-xs {
+  width: 4.5em;   /* enough for ~3 digits */
+  min-width: 4.5em;
+  max-width: 4.5em;
+}
+
+#editableTable thead th {
+  position: sticky;
+  top: 0;                /* stick to top of the container */
+  background-color: #fff; /* match your table background */
+  z-index: 10;            /* keep above rows */
+}
