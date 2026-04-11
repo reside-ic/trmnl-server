@@ -35,6 +35,7 @@ function addRow(data = {}) {
   const s = data.s ?? 12;
   const t = data.t ?? "";
   const c = data.c ?? "";
+  const img = data.i ?? "";
   maxRow++;
   const rowNo = maxRow;
 
@@ -95,6 +96,7 @@ function addRow(data = {}) {
       <button class="btn btn-outline-danger btn-sm action-delete"><i class="bi bi-trash-fill"></i></button>
       <button class="btn btn-outline-primary btn-sm action-up" ${dis1}><i class="bi bi-chevron-up"></i></button>
       <button class="btn btn-outline-primary btn-sm action-down" ${dis2}><i class="bi bi-chevron-down"></i></button>
+      <input type="hidden" data-field="imgData" value="${img}">
     </td>
   `;
   tbody.appendChild(row);
@@ -115,6 +117,7 @@ function getTableData() {
     const sVal = parseInt(row.querySelector('[data-field="size"]').value);
     const tVal = row.querySelector('[data-field="text"]').value;
     const jRadio = row.querySelector('input[type="radio"][name^="j-"]:checked');
+    const imgD = row.querySelector('input[data-field="imgData"]').value;
 
     return {
       typ : typeRadio ? typeRadio.value : "t",
@@ -124,7 +127,8 @@ function getTableData() {
       f: select ? select.value : "Arial",
       s: sVal,
       t: tVal,
-      c: color ? color.value : "black"
+      c: color ? color.value : "black",
+      i: imgD
     };
   });
 }
@@ -168,6 +172,7 @@ function maybeAutoPreview() {
 }
 
 let previewTimeout;
+let activeImageRow = null;
 
 function debouncePreview() {
   clearTimeout(previewTimeout);
@@ -342,7 +347,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-
   document.getElementById('deleteTemplateBtn').addEventListener('click', () => {
     deleteThing("existingTemplates", "template", "deleteTemplate.php")
   });
@@ -351,7 +355,49 @@ document.addEventListener("DOMContentLoaded", function() {
     deleteThing("existingNotices", "notice", "deleteNotice.php")
   });
 
+  /************************/
+  /* Handle uploading PNG */
+  /************************/
 
+  document.addEventListener("click", (e) => {
+    const input = e.target;
+    if (!input.matches('input[data-field="text"]')) return;
+    const row = input.closest("tr");
+    const type = row.querySelector('input[type="radio"][name^="t-"]:checked')?.value;
+    if ((type === "t") || (type === "q")) return;
+
+    if (type === "i") {
+      activeImageRow = row;
+      document.getElementById("rowFilePicker").click();
+    }
+  });
+
+  document.getElementById("rowFilePicker").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (!file || !activeImageRow) return;
+    const row = activeImageRow;
+    const textInput = row.querySelector('input[data-field="text"]');
+    textInput.value = file.name;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      let hidden = row.querySelector('input[data-field="imgData"]');
+      if (!hidden) {
+        hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.setAttribute("data-field", "img");
+        row.appendChild(hidden);
+      }
+      alert(ev.target.result);
+      hidden.value = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // reset
+    e.target.value = "";
+    activeImageRow = null;
+  });
+
+ 
   /********************************/
   /* Final first-time setup stuff */
   /********************************/

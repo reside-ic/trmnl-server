@@ -62,6 +62,24 @@
       imagedestroy($qrTrue);
       continue;
     }
+
+    if ($el['typ'] == "i") {
+      if (empty($el['i'])) continue;
+      $imgData = $el['i'];
+      $imgData = str_replace('data:image/png;base64,', '', $imgData);
+      $imgData = base64_decode($imgData);
+      $img = imagecreatefromstring($imgData);
+      if ($img !== false) {
+        $imgW = imagesx($img);
+        $imgH = imagesy($img);
+        if ($el['j'] != "l") {
+          if ($el['j'] == "c") $x -= (int)($imgW / 2);
+          else $x -= $imgW;
+        }
+        imagecopy($image, $img, $x, $el['y'], 0, 0, $imgW, $imgH);
+        imagedestroy($img);
+      }
+    }
   }
 
   imagepng($image);

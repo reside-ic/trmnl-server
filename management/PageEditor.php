@@ -41,6 +41,7 @@
     <script src="PageEditor.js"></script>
   </head>
   <body class="p-4">
+    <input type="file" id="rowFilePicker" accept="image/png" style="display:none">
     <div class="container">
       <div class="row mb-3">
         <div class="mb-6 col-md-6 text-center">
