@@ -114,13 +114,14 @@
         <table class="table-responsive" id="editableTable">
           <thead>
             <tr>
-              <th style="width:8%">X</th>
-              <th style="width:8%">Y</th>
+              <th style="width:11%">Type</th>
+              <th style="width:7%">X</th>
+              <th style="width:7%">Y</th>
               <th style="width:10%">Justify</th>
               <th style="width:22%">Font</th>
-              <th style="width:8%">Size</th>
-              <th style="width:9%">Colour</th>
-              <th style="width:19%">Text</th>
+              <th style="width:8%">Size/Scale</th>
+              <th style="width:10%">Colour</th>
+              <th style="width:16%">Text/Content</th>
               <th style="width:11%">Actions</th>
             </tr>
           </thead>

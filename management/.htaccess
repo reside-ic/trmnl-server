@@ -1,0 +1,9 @@
+AuthType Basic
+AuthName "Restricted Area"
+AuthUserFile "C:/xampp/secure/.htpasswd"
+Require user trmnl
+
+<FilesMatch "\.map$">
+  Require all granted
+  Satisfy Any
+</FilesMatch>

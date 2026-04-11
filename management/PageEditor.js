@@ -14,10 +14,10 @@ function getFontOptions(selected = "") {
   ).join("");
 }
 
-function updateRowButtons()	{
+function updateRowButtons() {
   const rows = document.querySelectorAll("#editableTable tbody tr");
 
-  rows.forEach((row, index)	=> {
+  rows.forEach((row, index) => {
     const upBtn = row.querySelector(".bi-chevron-up").closest("button");
     const downBtn = row.querySelector(".bi-chevron-down").closest("button");
     upBtn.disabled = (index === 0);
@@ -28,6 +28,7 @@ function updateRowButtons()	{
 function addRow(data = {}) {
   const tbody = document.querySelector("#editableTable tbody");
   const row = document.createElement("tr");
+  const typ = data.typ ?? "t";
   const x = data.x ?? 100;
   const y = data.y ?? 100;
   const j = data.j ?? "l";
@@ -35,24 +36,43 @@ function addRow(data = {}) {
   const t = data.t ?? "";
   const c = data.c ?? "";
   maxRow++;
-  const rowNo =	maxRow;
-  const idl = "lj-"+rowNo;
-  const idc = "cj-"+rowNo;
-  const idr = "rj-"+rowNo;
+  const rowNo = maxRow;
+
+  // Justification group. Left, center, right.
   const jg = "j-"+rowNo;
+  const idl = "lj-" + rowNo;
+  const idc = "cj-" + rowNo;
+  const idr = "rj-" + rowNo;
+  
+  // Type group. Text, QR, Image
+  const tg = "t-"+rowNo;
+  const idt = "tj-" + rowNo;
+  const idq = "qj-" + rowNo;
+  const idi = "ij-" + rowNo;
+
   const dis1 = (rowNo == 1) ? "disabled" : "";
   const dis2 = "";
 
   row.innerHTML = `
-    <td><input type="number" class="form-control" value="${x}"></td>
-    <td><input type="number" class="form-control" value="${y}"></td>
     <td>
       <div class="btn-group" role="group">
-        <input type="radio"	class="btn-check" name="${jg}" id="${idl}" value="l" ${j === "l" ? "checked" : ""}>
+        <input type="radio" class="btn-check" name="${tg}" id="${idt}" value="t" ${typ === "t" ? "checked" : ""}>
+        <label class="btn btn-outline-secondary" for="${idt}" ><i class="bi bi-type"></i></label>
+        <input type="radio" class="btn-check" name="${tg}" id="${idq}" value="q" ${typ === "q" ? "checked" : ""}>
+        <label class="btn btn-outline-secondary" for="${idq}" ><i class="bi bi-qr-code"></i></label>
+        <input type="radio" class="btn-check" name="${tg}" id="${idi}" value="i" ${typ === "i" ? "checked" : ""}>
+        <label class="btn btn-outline-secondary" for="${idi}" ><i class="bi bi-image"></i></label>
+      </div>
+    </td>
+    <td><input type="number" data-field="x" class="form-control" value="${x}"></td>
+    <td><input type="number" data-field="y" class="form-control" value="${y}"></td>
+    <td>
+      <div class="btn-group" role="group">
+        <input type="radio" class="btn-check" name="${jg}" id="${idl}" value="l" ${j === "l" ? "checked" : ""}>
         <label class="btn btn-outline-secondary" for="${idl}" >L</label>
-        <input type="radio"	class="btn-check" name="${jg}" id="${idc}" value="c" ${j === "c" ? "checked" : ""}>
+        <input type="radio" class="btn-check" name="${jg}" id="${idc}" value="c" ${j === "c" ? "checked" : ""}>
         <label class="btn btn-outline-secondary" for="${idc}" >C</label>
-        <input type="radio"	class="btn-check" name="${jg}" id="${idr}"value="r"	${j	===	"r"	? "checked"	: ""}>
+        <input type="radio" class="btn-check" name="${jg}" id="${idr}"value="r" ${j === "r" ? "checked" : ""}>
         <label class="btn btn-outline-secondary" for="${idr}" >R</label>
       </div>
     </td>
@@ -61,20 +81,20 @@ function addRow(data = {}) {
         ${getFontOptions(data.f)}
       </select>
     </td>
-    <td><input type="number" class="form-control" value="${s}"></td>
+    <td><input type="number" data-field="size" class="form-control" value="${s}"></td>
     <td class="d-flex align-items-center gap-2">
       <select class="form-select form-select-sm color-select">
-        <option value="black" ${c==="black"?"selected":""}>Black</option>
-        <option value="dgrey" ${c==="dgrey"?"selected":""}>Dark	Grey</option>
-        <option value="lgrey" ${c==="lgrey"?"selected":""}>Light Grey</option>
-        <option value="white" ${c==="white"?"selected":""}>White</option>
+        <option value="black" ${c==="black" ? "selected" : ""}>Black</option>
+        <option value="dgrey" ${c==="dgrey" ? "selected" : ""}>Dark Grey</option>
+        <option value="lgrey" ${c==="lgrey" ? "selected" : ""}>Light Grey</option>
+        <option value="white" ${c==="white" ? "selected" : ""}>White</option>
       </select>
     </td>
-    <td><input type="text" class="form-control" value="${t}"></td>
+    <td><input type="text" data-field="text" class="form-control" value="${t}"></td>
     <td>
-      <button class="btn btn-outline-danger	btn-sm action-delete"><i class="bi bi-trash-fill"></i></button>
+      <button class="btn btn-outline-danger btn-sm action-delete"><i class="bi bi-trash-fill"></i></button>
       <button class="btn btn-outline-primary btn-sm action-up" ${dis1}><i class="bi bi-chevron-up"></i></button>
-      <button class="btn btn-outline-primary btn-sm action-down" ${dis2}><i    class="bi bi-chevron-down"></i></button>
+      <button class="btn btn-outline-primary btn-sm action-down" ${dis2}><i class="bi bi-chevron-down"></i></button>
     </td>
   `;
   tbody.appendChild(row);
@@ -88,13 +108,22 @@ function getTableData() {
     const inputs = row.querySelectorAll("input");
     const select = row.querySelector("select");
     const color = row.querySelector(".color-select");
+
+    const typeRadio = row.querySelector('input[type="radio"][name^="t-"]:checked');
+    const xVal = parseInt(row.querySelector('[data-field="x"]').value);
+    const yVal = parseInt(row.querySelector('[data-field="y"]').value);
+    const sVal = parseInt(row.querySelector('[data-field="size"]').value);
+    const tVal = row.querySelector('[data-field="text"]').value;
+    const jRadio = row.querySelector('input[type="radio"][name^="j-"]:checked');
+
     return {
-      x: parseInt(inputs[0].value),
-      y: parseInt(inputs[1].value),
-      j: row.querySelector("input[type=radio]:checked")?.value || "left",
+      typ : typeRadio ? typeRadio.value : "t",
+      x: xVal,
+      y: yVal,
+      j: jRadio ? jRadio.value : "left",
       f: select ? select.value : "Arial",
-      s: parseInt(inputs[inputs.length-2].value),
-      t: inputs[inputs.length-1].value,
+      s: sVal,
+      t: tVal,
       c: color ? color.value : "black"
     };
   });
@@ -131,7 +160,6 @@ function showToast(message, type = 'success') {
   const toast = new bootstrap.Toast(toastEl);
   toast.show();
 }
-
 
 function maybeAutoPreview() {
   if (document.getElementById("autoPreview").checked) {
@@ -179,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!row) return;
 
     const btn = e.target.closest("button");
+    if (btn == null) return;
     if (btn.classList.contains("action-delete")) {
       row.remove();
       updateRowButtons();

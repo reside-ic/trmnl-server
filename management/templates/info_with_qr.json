@@ -1,0 +1,126 @@
+{
+    "name": "info_with_qr",
+    "back": "ic-display",
+    "elements": [
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 130,
+            "j": "l",
+            "f": "ImperialSansDisplay-Bold",
+            "s": 28,
+            "t": "Title",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 200,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 1",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 230,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 2",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 260,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 3",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 290,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 4",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 320,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 5",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 350,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 6",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 30,
+            "y": 380,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Text 7",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 550,
+            "y": 130,
+            "j": "l",
+            "f": "ImperialSansDisplay-Semibold",
+            "s": 16,
+            "t": "When",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 550,
+            "y": 170,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 16,
+            "t": "Date \/ Time",
+            "c": "black"
+        },
+        {
+            "typ": "t",
+            "x": 550,
+            "y": 230,
+            "j": "l",
+            "f": "ImperialSansDisplay-Semibold",
+            "s": 16,
+            "t": "Register",
+            "c": "black"
+        },
+        {
+            "typ": "q",
+            "x": 550,
+            "y": 250,
+            "j": "l",
+            "f": "ImperialSansDisplay-Regular",
+            "s": 4,
+            "t": "https:\/\/imperial.eu.qualtrics.com\/jfe\/form\/SV_5vdj6wagEPiKJU2",
+            "c": "black"
+        }
+    ]
+}
