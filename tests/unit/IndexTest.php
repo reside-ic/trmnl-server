@@ -57,7 +57,6 @@ class IndexTest extends BaseTest
         $this->assertStringContainsString('battery=4.1', $contents);
         $this->assertStringContainsString('firmware=1.2.3', $contents);
         $this->assertStringContainsString('rssi=-42', $contents);
-
     }
 
     public function testLogEndpoint(): void

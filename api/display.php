@@ -12,16 +12,19 @@ function getApiKeyTable(
     return $data;
 }
 
-function getScheduledImage($device, $page) {
-  $schedule = __DIR__.'/../config.json';
+function getScheduledImage(
+  $device,
+  $page,
+  string $schedule = __DIR__."/../config.json",
+  DateTime $now = new DateTime()
+) {
   $def = "https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png";
-  if (!file_exists($schedule)) return $def;
+  if (!file_exists($schedule)) return [$def, 0];
   $rows = json_decode(file_get_contents($schedule), true);
-  $now = new DateTime();
-  
+
   foreach ($rows as $row) {
     $from = new DateTime($row['from']);
-    $to   = new DateTime($row['to']);
+    $to = new DateTime($row['to']);
     if ($now >= $from && $now <= $to && in_array($device, $row['devices'])) {
       if ($page >= count($row['notices'])) $page = 0;
       $notice = $row['notices'][$page];
