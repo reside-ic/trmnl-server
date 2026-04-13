@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../management/helpers/preview.php';
+
 function getApiKeyTable(
     string $configFile = "../secret/config.json"
 ): array {
@@ -15,11 +17,14 @@ function getApiKeyTable(
 function getScheduledImage(
   $device,
   $page,
-  string $schedule = __DIR__."/../config.json",
+  string $schedule = __DIR__."/../management/schedule.json",
   DateTime $now = new DateTime()
 ) {
+
   $def = "https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png";
-  if (!file_exists($schedule)) return [$def, 0];
+  if (!file_exists($schedule)) {
+    return [$def, 0];
+  }
   $rows = json_decode(file_get_contents($schedule), true);
 
   foreach ($rows as $row) {
@@ -32,17 +37,18 @@ function getScheduledImage(
       $imgFile = __DIR__ . '/../images/' . $notice . '.png';
       if (!file_exists($imgFile)) {
         $noticeFile = basename($notice);
-        $previewUrl = __DIR__ . '/../management/helpers/preview.php?file=' . urlencode($noticeFile);
-        $imageData = file_get_contents($previewUrl);
-        $savePath = __DIR__ . '/../images/' . $noticeFile . '.png';
-        file_put_contents($savePath, $imageData);
+        $noticeJson = __DIR__ . '/../management/notices/'.$noticeFile.".json";
+        $noticePng = __DIR__ . '/../images/'.$noticeFile.".png";
+        $data = json_decode(file_get_contents($noticeJson), true);
+        $img = doPreview($data);
+        imagepng($img, $noticePng);
+        imagedestroy($img);
       }
       return ["https://mrcdata.dide.ic.ac.uk/trmnl/images/" . $notice . ".png", $page];
     }
   }
   return [$def, $page];
 }
-
 
 function doDisplay(
     $headers,

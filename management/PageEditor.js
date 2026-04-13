@@ -136,7 +136,6 @@ function getTableData() {
 function updatePreview() {
   const data = getTableData();
   const bg = document.getElementById("backgroundImg").value;
-
   fetch("helpers/preview.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
