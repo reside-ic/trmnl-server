@@ -38,7 +38,8 @@ function doSetup(
     "friendly_id" => $device["friendly_id"],
     "image_url" => "https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png",
     "filename" => "empty_state",
-    "message" => "Setup successful"
+    "message" => "Setup successful",
+    "page" => 0
     ]);
 }
 ?>

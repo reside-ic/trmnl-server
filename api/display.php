@@ -14,17 +14,8 @@ function getApiKeyTable(
     return $data;
 }
 
-function getScheduledImage(
-  $device,
-  $page,
-  string $schedule = __DIR__."/../management/schedule.json",
-  DateTime $now = new DateTime()
-) {
-
+function getScheduledImage($device, $page, $schedule, $now, $noticeDir, $imgDir) {
   $def = "https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png";
-  if (!file_exists($schedule)) {
-    return [$def, 0];
-  }
   $rows = json_decode(file_get_contents($schedule), true);
 
   foreach ($rows as $row) {
@@ -34,11 +25,11 @@ function getScheduledImage(
       if ($page >= count($row['notices'])) $page = 0;
       $notice = $row['notices'][$page];
       $page++;
-      $imgFile = __DIR__ . '/../images/' . $notice . '.png';
+      $imgFile = $imgDir.$notice.'.png';
       if (!file_exists($imgFile)) {
         $noticeFile = basename($notice);
-        $noticeJson = __DIR__ . '/../management/notices/'.$noticeFile.".json";
-        $noticePng = __DIR__ . '/../images/'.$noticeFile.".png";
+        $noticeJson = $noticeDir.$noticeFile.".json";
+        $noticePng = $imgDir.$noticeFile.".png";
         $data = json_decode(file_get_contents($noticeJson), true);
         $img = doPreview($data);
         imagepng($img, $noticePng);
@@ -47,13 +38,16 @@ function getScheduledImage(
       return ["https://mrcdata.dide.ic.ac.uk/trmnl/images/" . $notice . ".png", $page];
     }
   }
-  return [$def, $page];
 }
 
 function doDisplay(
     $headers,
     string $configFile = "../secret/config.json",
-    string $dataDir = "../secret/"
+    string $dataDir = "../secret/",
+    string $schedule = __DIR__."/../management/schedule.json",
+    DateTime $now = new DateTime(),
+    string $noticeDir = __DIR__ . '/../management/notices/',
+    string $imgDir = __DIR__ . '/../images/'
 ) {
 
     $devices = getApiKeyTable($configFile);
@@ -79,10 +73,9 @@ function doDisplay(
       }
     }
 
-    $image_url = "https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png";
-    $image_url = "https://mrcdata.dide.ic.ac.uk/trmnl/images/ic-back2.png";
-    $image_url = "https://mrcdata.dide.ic.ac.uk/trmnl/images/out.png";
-    list($image_url, $page) = getScheduledImage($dev['friendly_id'], $page);
+    list($image_url, $page) = getScheduledImage(
+      $dev['friendly_id'], $page,
+      $schedule, $now, $noticeDir, $imgDir);
 
     $dateTime = date('Y-m-d H:i:s');
     $fp = fopen($conf_file, 'c');

@@ -20,6 +20,10 @@ class IndexTest extends BaseTest
         $GLOBALS['CONFIG_FILE'] = $this->testConfigFile;
         $GLOBALS['DATA_DIR'] = dirname($this->testConfigFile)."/";
         $GLOBALS['LOG_FILE'] = $this->testLogFile;
+        $GLOBALS['SCHEDULE'] = $this->testScheduleFile;
+        $GLOBALS['FORCE_DATE'] = new DateTime("2026-04-01");
+        $GLOBALS['NOTICE_DIR'] = $this->testNoticeDir;
+        $GLOBALS['IMG_DIR'] = $this->testImageDir;
 
         if ($body !== null) {
             $GLOBALS['__php_input'] = $body;
@@ -49,7 +53,8 @@ class IndexTest extends BaseTest
         $response = $this->runIndexWithPath('/display', $headers);
         $this->assertEquals(0, $response['status']);
         $this->assertEquals('180', $response['refresh_rate']);
-        $this->assertEquals('https://mrcdata.dide.ic.ac.uk/trmnl/images/setup-logo.png', $response['image_url']);
+        $this->assertEquals('https://mrcdata.dide.ic.ac.uk/trmnl/images/notice1.png', $response['image_url']);
+        $this->assertFileExists($this->testImageDir."/notice1.png");
 
         $txtfile = dirname($this->testConfigFile)."/device1.txt";
         $this->assertFileExists($txtfile);
@@ -57,6 +62,11 @@ class IndexTest extends BaseTest
         $this->assertStringContainsString('battery=4.1', $contents);
         $this->assertStringContainsString('firmware=1.2.3', $contents);
         $this->assertStringContainsString('rssi=-42', $contents);
+
+        $response = $this->runIndexWithPath('/display', $headers);
+        $this->assertEquals('https://mrcdata.dide.ic.ac.uk/trmnl/images/notice2.png', $response['image_url']);
+        $this->assertFileExists($this->testImageDir."/notice2.png");
+
     }
 
     public function testLogEndpoint(): void

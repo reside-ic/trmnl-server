@@ -18,7 +18,8 @@ for ($i = 1; $i <= 4; $i++) {
     'device' => "device".$i,
     'last_refresh' => $info['last_refresh'],
     'battery' => $info['battery'],
-    'rssi' => $info['rssi']
+    'rssi' => $info['rssi'],
+    'page' => $info['page']
   ];
 }
 
@@ -43,7 +44,8 @@ for ($i = 1; $i <= 4; $i++) {
         <thead class="table-dark">
           <tr>
             <th>Device</th>
-            <th>Last Refresh</th>
+            <th>Last Refresh (GMT)</th>
+            <th>Page</th>
             <th>Battery</th>
             <th>WiFi (RSSI)</th>
           </tr>
@@ -53,6 +55,7 @@ for ($i = 1; $i <= 4; $i++) {
             <tr>
               <td><?= htmlspecialchars($row['device']) ?></td>
               <td><?= htmlspecialchars($row['last_refresh']) ?></td>
+              <td><?= htmlspecialchars($row['page']) ?></td>
               <td><?= htmlspecialchars($row['battery']) ?></td>
               <td><?= htmlspecialchars($row['rssi']) ?></td>
             </tr>
@@ -60,8 +63,8 @@ for ($i = 1; $i <= 4; $i++) {
         </tbody>
       </table>
       <div class="mt-3 d-flex justify-content-center gap-2">
-        <a href="Scheduler.php" class="btn btn-primary me-2">Schedule Editor</a>
-        <a href="PageEditor.php" class="btn btn-primary me-2">Page Editor</a>
+        <a target="_scheduler" href="Scheduler.php" class="btn btn-primary me-2">Schedule Editor</a>
+        <a target="_editor" href="PageEditor.php" class="btn btn-primary me-2">Page Editor</a>
       </div>
     </div>
   </body>
