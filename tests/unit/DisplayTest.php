@@ -32,7 +32,10 @@ class DisplayTest extends BaseTest
                     'RSSI' => '-43'];
         ob_start();
         $testFolder = dirname($this->testConfigFile)."/";
-        doDisplay($headers, $this->testConfigFile, $testFolder);
+        doDisplay($headers, $this->testConfigFile, $testFolder, 
+          $this->testScheduleFile, new DateTime("2026-04-01"), 
+          $this->testNoticeDir, $this->testImageDir);
+
         $output = ob_get_clean();
         $response = json_decode($output, true);
         $this->assertEquals(0, $response['status']);
