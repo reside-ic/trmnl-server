@@ -69,7 +69,7 @@ function doDisplay(
       $data = file($conf_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
       foreach ($data as $line) {
         list($key, $value) = explode('=', $line, 2);
-        if ($key == "page") $page = $value;
+        if ($key == "page") $page = intval($value);
       }
     }
 
