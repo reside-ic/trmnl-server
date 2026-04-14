@@ -7,8 +7,8 @@ require_once "display.php";
 require_once "log.php";
 $headers = array_change_key_case(getallheaders(), CASE_UPPER);
 
-$configFile = $GLOBALS['CONFIG_FILE'] ?? __DIR__."../secret/config.json";
-$dataDir = $GLOBALS['DATA_DIR'] ?? __DIR__."../secret/";
+$configFile = $GLOBALS['CONFIG_FILE'] ?? __DIR__."/../secret/config.json";
+$dataDir = $GLOBALS['DATA_DIR'] ?? __DIR__."/../secret/";
 $schedule = $GLOBALS['SCHEDULE'] ?? __DIR__."/../management/schedule.json";
 $now = $GLOBALS['FORCE_DATE'] ?? new DateTime();
 $noticeDir = $GLOBALS['NOTICE_DIR'] ?? __DIR__."/../management/notices/";
