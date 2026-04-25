@@ -377,6 +377,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const row = activeImageRow;
     const textInput = row.querySelector('input[data-field="text"]');
     textInput.value = file.name;
+    alert(file.name);
     const reader = new FileReader();
     reader.onload = function (ev) {
       let hidden = row.querySelector('input[data-field="imgData"]');
@@ -386,8 +387,15 @@ document.addEventListener("DOMContentLoaded", function() {
         hidden.setAttribute("data-field", "img");
         row.appendChild(hidden);
       }
-      alert(ev.target.result);
       hidden.value = ev.target.result;
+
+      const img = new Image();
+      img.onload = function () {
+        const width = img.width;
+        let sizeInput = row.querySelector('input[data-field="size"]');
+        sizeInput.value = width;
+      };
+      img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
 

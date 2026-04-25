@@ -46,15 +46,20 @@
     imagedestroy($qrTrue);
   }
 
-  function drawImage($image, $x, $y, $just, $imgData) {
+  function drawImage($image, $x, $y, $just, $imgData, $wid) {
     $imgData = str_replace('data:image/png;base64,', '', $imgData);
     $imgData = base64_decode($imgData);
     $img = imagecreatefromstring($imgData);
     if ($img !== false) {
       $imgW = imagesx($img);
       $imgH = imagesy($img);
-      $x = justify($x, $just, $imgW);
-      imagecopy($image, $img, $x, $y, 0, 0, $imgW, $imgH);
+      $newW = $imgW;
+      $newH = $imgH;
+      $scale = $wid / $imgW;
+      $newW = $wid;
+      $newH = (int) ($imgH * $scale);
+      $x = justify($x, $just, $newW);
+      imagecopyresampled($image, $img, $x, $y, 0, 0, $newW, $newH, $imgW, $imgH);
       imagedestroy($img);
     }
   }
@@ -69,7 +74,7 @@
       } else if ($el['typ'] == "q") {
         drawQR($image, $el['x'], $el['y'], $el['s'], $el['j'], $el['c'], $el['t']);
       } else if (($el['typ'] == "i") && (!empty($el['i']))) {
-        drawImage($image, $el['x'], $el['y'], $el['j'], $el['i']);
+        drawImage($image, $el['x'], $el['y'], $el['j'], $el['i'], $el['s']);
       }
     }
 
