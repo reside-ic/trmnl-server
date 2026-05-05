@@ -18,6 +18,7 @@ for ($i = 1; $i <= 4; $i++) {
     'device' => "device".$i,
     'last_refresh' => $info['last_refresh'],
     'battery' => $info['battery'],
+    'firmware' => $info['firmware'],
     'rssi' => $info['rssi'],
     'page' => $info['page']
   ];
@@ -46,6 +47,7 @@ for ($i = 1; $i <= 4; $i++) {
             <th>Device</th>
             <th>Last Refresh (GMT)</th>
             <th>Page</th>
+            <th>Firmware</th>
             <th>Battery</th>
             <th>WiFi (RSSI)</th>
           </tr>
@@ -56,6 +58,7 @@ for ($i = 1; $i <= 4; $i++) {
               <td><?= htmlspecialchars($row['device']) ?></td>
               <td><?= htmlspecialchars($row['last_refresh']) ?></td>
               <td><?= htmlspecialchars($row['page']) ?></td>
+              <td><?= htmlspecialchars($row['firmware']) ?></td>
               <td><?= htmlspecialchars($row['battery']) ?></td>
               <td><?= htmlspecialchars($row['rssi']) ?></td>
             </tr>
