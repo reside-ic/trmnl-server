@@ -1,4 +1,5 @@
 var maxRow = 0;
+var saved_state = "";
 
 const FONT_LIST = JSON.parse(
   document.getElementById("font-data").textContent
@@ -257,6 +258,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
     const rows = getTableData();
+    saved_state = JSON.stringify(rows);
     fetch(`helpers/${phpfile}`, {
       method: 'POST',
       headers: {
@@ -303,7 +305,13 @@ document.addEventListener("DOMContentLoaded", function() {
         showToast(`Please select a ${thing} to load`, "danger");
         return;
     }
-    if (!confirm(`Load ${thing} "${name}"?\nUnsaved changes will be lost.`)) return;
+    const current = JSON.stringify(getTableData());
+    if (saved_state == "") {
+      saved_state = current;
+    }
+    if (current !== saved_state) {
+      if (!confirm(`Load ${thing} "${name}"?\nUnsaved changes will be lost.`)) return;
+    }
     fetch(`helpers/${phpfile}?name=${encodeURIComponent(name)}`)
       .then(res => res.json())
       .then(data => {
@@ -311,7 +319,8 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("backgroundImg").value = data.back;
         loadPage(data.elements);
         debouncePreview();
-        showToast(`Sucessfully xloaded ${thing} "${name}"`);
+        showToast(`Sucessfully loaded ${thing} "${name}"`);
+        saved_state = JSON.stringify(getTableData());
     });
   }
 
