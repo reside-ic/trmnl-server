@@ -26,16 +26,33 @@ function updateRowButtons() {
   });
 }
 
+function copyRowData(row) {
+  return {
+    typ: row.querySelector('input[name^="t-"]:checked')?.value,
+    x: row.querySelector('[data-field="x"]')?.value,
+    y: row.querySelector('[data-field="y"]')?.value,
+    j: row.querySelector('input[name^="j-"]:checked')?.value,
+    f: row.querySelector("select.form-select")?.value,
+    s: row.querySelector('[data-field="size"]')?.value,
+    c: row.querySelector(".color-select")?.value,
+    t: row.querySelector('[data-field="text"]')?.value,
+    i: row.querySelector('[data-field="imgData"]')?.value
+  };
+}
+
 function addRow(data = {}) {
   const tbody = document.querySelector("#editableTable tbody");
-  const row = document.createElement("tr");
+  const selectedRow = tbody.querySelector("tr.selected");
+  if (selectedRow && Object.keys(data).length === 0) {
+    data = copyRowData(selectedRow);
+  }
   const typ = data.typ ?? "t";
   const x = data.x ?? 100;
   const y = data.y ?? 100;
   const j = data.j ?? "l";
   const s = data.s ?? 12;
   const t = data.t ?? "";
-  const c = data.c ?? "";
+  const c = data.c ?? "black";
   const img = data.i ?? "";
   maxRow++;
   const rowNo = maxRow;
@@ -54,6 +71,8 @@ function addRow(data = {}) {
 
   const dis1 = (rowNo == 1) ? "disabled" : "";
   const dis2 = "";
+
+  const row = document.createElement("tr");
 
   row.innerHTML = `
     <td>
@@ -100,7 +119,14 @@ function addRow(data = {}) {
       <input type="hidden" data-field="imgData" value="${img}">
     </td>
   `;
-  tbody.appendChild(row);
+  if (selectedRow) {
+    selectedRow.insertAdjacentElement("afterend", row);
+  } else {
+    tbody.appendChild(row);
+  }
+
+  tbody.querySelectorAll("tr.selected").forEach(r => { r.classList.remove("selected"); });
+  row.scrollIntoView({behavior: "smooth", block: "nearest"});
   updateRowButtons();
 }
 
@@ -216,12 +242,15 @@ document.addEventListener("DOMContentLoaded", function() {
     if (btn.classList.contains("action-delete")) {
       row.remove();
       updateRowButtons();
+      updatePreview();
     } else if (btn.classList.contains("action-up") && row.previousElementSibling) {
       row.parentNode.insertBefore(row, row.previousElementSibling);
       updateRowButtons();
+      updatePreview();
     } else if (btn.classList.contains("action-down") && row.nextElementSibling) {
       row.parentNode.insertBefore(row.nextElementSibling, row);
       updateRowButtons();
+      updatePreview();
     }
   });
   
@@ -411,6 +440,17 @@ document.addEventListener("DOMContentLoaded", function() {
     // reset
     e.target.value = "";
     activeImageRow = null;
+  });
+
+  tbody.addEventListener("click", e => {
+    const row = e.target.closest("tr");
+    if (!row) return;
+
+    tbody.querySelectorAll("tr.selected").forEach(r => {
+      r.classList.remove("selected");
+    });
+
+    row.classList.add("selected");
   });
 
  

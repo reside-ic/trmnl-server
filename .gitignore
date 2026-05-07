@@ -5,3 +5,5 @@ secret/*.txt
 tests/unit/fixtures
 .phpunit.result.cache
 coverage-report
+management/notices/*
+images/*
