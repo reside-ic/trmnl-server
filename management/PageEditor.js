@@ -307,10 +307,11 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch(`helpers/${phpfile}?name=${encodeURIComponent(name)}`)
       .then(res => res.json())
       .then(data => {
-        loadPage(data.elements);
         document.getElementById(`${thing}Name`).value = name;
+        document.getElementById("backgroundImg").value = data.back;
+        loadPage(data.elements);
         debouncePreview();
-        showToast(`Sucessfully loaded ${thing} "${name}"`);
+        showToast(`Sucessfully xloaded ${thing} "${name}"`);
     });
   }
 
@@ -377,7 +378,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const row = activeImageRow;
     const textInput = row.querySelector('input[data-field="text"]');
     textInput.value = file.name;
-    alert(file.name);
     const reader = new FileReader();
     reader.onload = function (ev) {
       let hidden = row.querySelector('input[data-field="imgData"]');
