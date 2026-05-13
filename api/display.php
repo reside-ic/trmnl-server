@@ -2,6 +2,13 @@
 
 require_once __DIR__ . '/../management/helpers/preview.php';
 
+// Latest firmware version and its filename in /firmware.
+// If the version a TRMNL reports is different from this
+// (either greater or less), then we flash it with this.
+
+$LATEST_FW_VERSION = "1.8.3";
+$LATEST_FW_FILE = "fw-1.8.3-wes.bin";
+
 function getApiKeyTable(
     string $configFile = "../secret/config.json"
 ): array {
@@ -26,18 +33,27 @@ function getScheduledImage($device, $page, $schedule, $now, $noticeDir, $imgDir)
       $notice = $row['notices'][$page];
       $page++;
       $imgFile = $imgDir.$notice.'.png';
-      if (!file_exists($imgFile)) {
-        $noticeFile = basename($notice);
-        $noticeJson = $noticeDir.$noticeFile.".json";
-        $noticePng = $imgDir.$noticeFile.".png";
+      $noticeFile = basename($notice);
+      $noticeJson = $noticeDir.$noticeFile.".json";
+      $regenerate = (!file_exists($imgFile));
+      if (!$regenerate) {
+        $pngDate = filemtime($imgFile);
+        $jsonDate = filemtime($noticeJson);
+        if ($jsonDate > $pngDate) {
+          $regenerate = true;
+        }
+      }
+
+      if ($regenerate) {
         $data = json_decode(file_get_contents($noticeJson), true);
         $img = doPreview($data);
-        imagepng($img, $noticePng);
+        imagepng($img, $imgFile);
         imagedestroy($img);
       }
       return ["https://mrcdata.dide.ic.ac.uk/trmnl/images/" . $notice . ".png", $page];
     }
   }
+  return [$def, 0];
 }
 
 function doDisplay(
@@ -49,6 +65,7 @@ function doDisplay(
     string $noticeDir = __DIR__ . '/../management/notices/',
     string $imgDir = __DIR__ . '/../images/'
 ) {
+    global $LATEST_FW_VERSION, $LATEST_FW_FILE;
 
     $devices = getApiKeyTable($configFile);
     $mac = $headers['ID'] ?? null;
@@ -62,8 +79,8 @@ function doDisplay(
     }
 
     $dev = $devices[$token];
-
-    $conf_file = $dataDir.$dev['friendly_id'].".txt";
+    $friendly_id = $dev['friendly_id'];
+    $conf_file = $dataDir.$friendly_id.".txt";
     $page = 0;
     if (file_exists($conf_file)) {
       $data = file($conf_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -74,7 +91,7 @@ function doDisplay(
     }
 
     list($image_url, $page) = getScheduledImage(
-      $dev['friendly_id'], $page,
+      $friendly_id, $page,
       $schedule, $now, $noticeDir, $imgDir);
 
     $dateTime = date('Y-m-d H:i:s');
@@ -90,14 +107,16 @@ function doDisplay(
       flock($fp, LOCK_UN);
       fclose($fp);
     }
+    $update_fw = ($fw != $LATEST_FW_VERSION);
+    $fw_url = ($update_fw) ? "https://mrcdata.dide.ic.ac.uk/trmnl/firmware/".$LATEST_FW_FILE : null;
 
     echo json_encode([
-    "status" => 0,
-    "image_url" => $image_url,
-    "filename" => date("c"),
-    "update_firmware" => false,
-    "firmware_url" => null,
-    "refresh_rate" => $dev["refresh_rate"],
-    "reset_firmware" => false
+      "status" => 0,
+      "image_url" => $image_url,
+      "filename" => date("c"),
+      "update_firmware" => $update_fw,
+      "firmware_url" => $fw_url,
+      "refresh_rate" => $dev["refresh_rate"],
+      "reset_firmware" => false
     ]);
 }
