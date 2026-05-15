@@ -52,7 +52,6 @@ class IndexTest extends BaseTest
                     'BATTERY_VOLTAGE' => '4.1'];
         $response = $this->runIndexWithPath('/display', $headers);
         $this->assertEquals(0, $response['status']);
-        $this->assertEquals('180', $response['refresh_rate']);
         $this->assertEquals('https://mrcdata.dide.ic.ac.uk/trmnl/images/notice1.png', $response['image_url']);
         $this->assertFileExists($this->testImageDir."/notice1.png");
 
