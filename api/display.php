@@ -21,7 +21,7 @@ function getApiKeyTable(
 }
 
 function getNextRefresh(?DateTime $now = null) : int {
-  $now = $now ?? new DateTime('now');
+  $now = $now ?? new DateTime('now', new DateTimeZone('Europe/London'));
   $weekday = (int) $now->format("N"); // 1 = Monday, 7 = Sunday
   $hour = (int) $now->format("G");    // hour 0..23
 
@@ -103,7 +103,7 @@ function doDisplay(
     string $configFile = "../secret/config.json",
     string $dataDir = "../secret/",
     string $schedule = __DIR__."/../management/schedule.json",
-    DateTime $now = new DateTime(),
+    DateTime $now = new DateTime('now', new DateTimeZone('Europe/London')),
     string $noticeDir = __DIR__ . '/../management/notices/',
     string $imgDir = __DIR__ . '/../images/'
 ) {
