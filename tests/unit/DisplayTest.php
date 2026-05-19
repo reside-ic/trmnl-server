@@ -13,12 +13,10 @@ class DisplayTest extends BaseTest
         $devices = getApiKeyTable($this->testConfigFile);
         $expected = [
         'key1' => [
-        'friendly_id' => 'device1',
-        'refresh_rate' => '180'
+        'friendly_id' => 'device1'
         ],
         'key2' => [
-        'friendly_id' => 'device2',
-        'refresh_rate' => '360'
+        'friendly_id' => 'device2'
         ]
         ];
         $this->assertEquals($expected, $devices);
@@ -39,7 +37,6 @@ class DisplayTest extends BaseTest
         $output = ob_get_clean();
         $response = json_decode($output, true);
         $this->assertEquals(0, $response['status']);
-        $this->assertEquals('360', $response['refresh_rate']);
 
         $txtfile = $testFolder."device2.txt";
         $this->assertFileExists($txtfile);
@@ -49,7 +46,7 @@ class DisplayTest extends BaseTest
         $this->assertStringContainsString('rssi=-43', $contents);
     }
 
-    public function testDoSisplayDeviceNotFound(): void
+    public function testDoDisplayDeviceNotFound(): void
     {
         $headers = ['ACCESS-TOKEN' => 'potato'];
         ob_start();
@@ -58,5 +55,33 @@ class DisplayTest extends BaseTest
         $response = json_decode($output, true);
         $this->assertEquals(500, $response['status']);
         $this->assertEquals('Device not found', $response['error']);
+    }
+
+    public function testRefreshVals(): void
+    {
+        // Monday 9am - expected 900 seconds
+        $this->assertEquals(900, getNextRefresh(new DateTime("2026-05-18 09:00:00")));
+
+        // Tuesday 1pm - expected 300 seconds
+        $this->assertEquals(300, getNextRefresh(new DateTime("2026-05-19 13:00:00")));
+
+        // Wednesday 3pm - expected 900 seconds
+        $this->assertEquals(900, getNextRefresh(new DateTime("2026-05-20 15:00:00")));
+
+        // Thursday 11pm - expected 9 hours
+        $this->assertEquals(9 * 3600, getNextRefresh(new DateTime("2026-05-21 23:00:00")));
+
+        // Friday 8pm - expected to be... 4 hours + 48 hours + 8 hours = 60.
+        $this->assertEquals(60 * 3600, getNextRefresh(new DateTime("2026-05-22 20:00:00")));
+
+        // Saturday 8pm - expected to be... 4 hours + 24 hours + 8 hours = 36.
+        $this->assertEquals(36 * 3600, getNextRefresh(new DateTime("2026-05-23 20:00:00")));
+
+        // Monday 1am - expected to be... 7 hours
+        $this->assertEquals(7 * 3600, getNextRefresh(new DateTime("2026-05-18 01:00:00")));
+
+        // Thursday 1am - also expected to be... 7 hours
+        $this->assertEquals(7 * 3600, getNextRefresh(new DateTime("2026-05-21 01:00:00")));
+
     }
 }
