@@ -45,7 +45,7 @@ for ($i = 1; $i <= 4; $i++) {
         <thead class="table-dark">
           <tr>
             <th>Device</th>
-            <th>Last Refresh (GMT)</th>
+            <th>Last Refresh</th>
             <th>Page</th>
             <th>Firmware</th>
             <th>Battery</th>
